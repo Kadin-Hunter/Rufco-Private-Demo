@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>RoofCommand Build Explorer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129517;</text></svg>">
+</head>
+<body>
+<style>
+:root{
+  --ink-deep:#100820; --ink-dark:#1A0A2E; --ink-mid:#26215C;
+  --lilac-text:#EEEDFE; --lilac-soft:#AFA9EC; --lilac-deep:#7F77DD;
+  --indigo:#534AB7; --slate:#1E293B;
+  --teal:#0D9488; --teal-tint:#F0FDFA;
+  --red:#DC2626; --red-tint:#FFF2F2;
+  --blue:#1D4ED8; --blue-tint:#EFF6FF;
+  --orange:#D97706; --orange-tint:#FFFBEB;
+  --paper:#FFFFFF; --paper-tint:#F8F9FF; --yellow:#FFF7CC; --rule:#E2E1F2;
+  --muted:#64748B; --headtxt:#26215C;
+  --font:Arial,"Liberation Sans",Helvetica,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#14111F; --paper-tint:#1B1729; --slate:#E7E5F2; --rule:#332C4D;
+    --muted:#9A93B5; --yellow:#3A3316; --headtxt:#AFA9EC;
+    --teal-tint:#0C2724; --red-tint:#2E1517; --blue-tint:#111C38; --orange-tint:#2B2010;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#14111F; --paper-tint:#1B1729; --slate:#E7E5F2; --rule:#332C4D;
+  --muted:#9A93B5; --yellow:#3A3316; --headtxt:#AFA9EC;
+  --teal-tint:#0C2724; --red-tint:#2E1517; --blue-tint:#111C38; --orange-tint:#2B2010;
+}
+*{box-sizing:border-box;}
+body{font-family:var(--font);color:var(--slate);background:var(--paper);margin:0;
+  font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%;}
+.wrap{max-width:1180px;margin:0 auto;padding-bottom:60px;}
+
+.hdr__strip{height:6px;background:var(--ink-deep);}
+.hdr__title{padding:9px 16px;background:var(--ink-deep);color:var(--lilac-text);font-weight:700;font-size:17px;}
+.hdr__doc{padding:7px 16px;background:var(--ink-dark);color:var(--lilac-soft);font-weight:700;font-size:16px;}
+.hdr__tag{padding:5px 16px;background:var(--ink-mid);color:var(--lilac-deep);font-size:12px;}
+.hdr__inst{padding:7px 16px;background:var(--lilac-text);color:var(--ink-mid);font-size:12px;}
+
+.intro{padding:16px 16px 0 16px;max-width:840px;}
+.intro p{margin:0 0 10px 0;}
+.band{background:var(--ink-dark);color:var(--lilac-soft);padding:7px 16px;font-weight:700;font-size:13px;margin:22px 0 0 0;}
+.cols{display:grid;grid-template-columns:1fr 300px;gap:18px;padding:0 16px;align-items:start;}
+@media (max-width:880px){.cols{grid-template-columns:1fr;}}
+
+/* mode switch */
+.modebar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  border:1px solid var(--rule);background:var(--paper-tint);padding:9px 12px;margin-top:14px;}
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none;font-size:13px;font-weight:700;}
+.switch input{position:absolute;opacity:0;width:0;height:0;}
+.track{width:44px;height:22px;background:#C9C6DE;position:relative;flex:0 0 44px;transition:background .2s ease;}
+.knob{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;transition:transform .24s ease;}
+.switch input:checked + .track{background:var(--teal);}
+.switch input:checked + .track .knob{transform:translateX(22px);}
+.switch input:focus-visible + .track{outline:2px solid var(--indigo);outline-offset:2px;}
+.modehint{font-size:11.5px;color:var(--muted);}
+
+/* accordion section */
+.sec{border:1px solid var(--rule);margin-top:10px;background:var(--paper);}
+.sec__head{display:flex;align-items:center;gap:11px;width:100%;text-align:left;cursor:pointer;
+  background:var(--paper);border:0;border-left:5px solid var(--rule);padding:11px 12px;
+  font-family:var(--font);color:inherit;transition:border-color .2s ease,background .15s ease;}
+.sec__head:hover{background:var(--paper-tint);}
+.sec__head:focus-visible{outline:2px solid var(--indigo);outline-offset:-2px;}
+.sec.locked .sec__head{opacity:.45;cursor:not-allowed;}
+.sec.locked .sec__head:hover{background:var(--paper);}
+.stepn{flex:0 0 auto;background:var(--ink-mid);color:var(--lilac-text);font-size:10.5px;font-weight:700;
+  padding:3px 7px;letter-spacing:.05em;}
+.sec.answered .stepn{background:var(--teal);}
+.headmain{flex:1 1 auto;min-width:0;}
+.headq{font-weight:700;font-size:14px;color:var(--headtxt);}
+.headpick{font-weight:700;font-size:14px;}
+.headsub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.headprice{flex:0 0 auto;font-size:11.5px;font-weight:700;color:var(--indigo);white-space:nowrap;}
+.chev{flex:0 0 auto;font-size:13px;color:var(--muted);transition:transform .3s ease;line-height:1;}
+.sec.open .chev{transform:rotate(180deg);}
+
+.sec__body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s ease;}
+.sec.open .sec__body{grid-template-rows:1fr;}
+.sec__inner{overflow:hidden;min-height:0;}
+.sec__pad{padding:0 12px 12px 12px;}
+.hint{font-size:12px;color:var(--muted);margin:0 0 10px 0;padding-top:2px;}
+
+.fan{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
+.card{border:1px solid var(--rule);background:var(--paper);text-align:left;padding:0;cursor:pointer;
+  font-family:var(--font);color:inherit;display:block;width:100%;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .26s ease,transform .26s ease,border-color .15s ease;}
+.sec.open .card{opacity:1;transform:none;}
+.sec.open .card:nth-child(1){transition-delay:.06s,.06s,0s;}
+.sec.open .card:nth-child(2){transition-delay:.13s,.13s,0s;}
+.sec.open .card:nth-child(3){transition-delay:.20s,.20s,0s;}
+.card:hover{border-color:var(--indigo);}
+.card:focus-visible{outline:2px solid var(--indigo);outline-offset:2px;}
+.card__head{padding:7px 11px;color:#fff;font-weight:700;font-size:13.5px;display:flex;
+  justify-content:space-between;gap:8px;align-items:baseline;}
+.card__price{font-size:11.5px;font-weight:700;letter-spacing:.03em;white-space:nowrap;opacity:.95;}
+.card__body{padding:9px 11px;font-size:12.5px;background:var(--paper-tint);}
+.card__body p{margin:0 0 6px 0;}
+.card__body ul{margin:0;padding-left:16px;}
+.card__body li{margin-bottom:3px;}
+.c-blue .card__head{background:var(--blue);}   .c-blue .card__body{background:var(--blue-tint);}
+.c-teal .card__head{background:var(--teal);}   .c-teal .card__body{background:var(--teal-tint);}
+.c-orange .card__head{background:var(--orange);} .c-orange .card__body{background:var(--orange-tint);}
+.c-indigo .card__head{background:var(--indigo);} .c-indigo .card__body{background:var(--paper-tint);}
+.c-red .card__head{background:var(--red);}     .c-red .card__body{background:var(--red-tint);}
+.card.sel{outline:3px solid var(--indigo);outline-offset:-1px;}
+.card.dead{cursor:help;}
+.rec{display:inline-block;background:#fff;color:var(--teal);font-size:10px;font-weight:700;
+  padding:1px 5px;margin-left:6px;letter-spacing:.04em;vertical-align:1px;}
+.why{margin-top:7px;padding:7px 9px;background:var(--paper);border-left:3px solid var(--red);font-size:12px;}
+.why.warn{border-left-color:var(--orange);}
+.why:empty{display:none;margin:0;padding:0;}
+@media (prefers-reduced-motion:reduce){
+  .card,.sec__body,.chev,.knob,.track{transition:none !important;}
+  .card{opacity:1;transform:none;}
+}
+
+/* cost panel */
+.panel{border:1px solid var(--rule);position:sticky;top:12px;}
+@media (max-width:880px){.panel{position:static;}}
+.panel__h{background:var(--ink-dark);color:var(--lilac-soft);padding:7px 12px;font-weight:700;font-size:12.5px;}
+.panel__b{padding:12px;background:var(--paper);}
+.tot{background:var(--indigo);color:#fff;padding:12px;margin-bottom:10px;}
+.tot .n{font-size:30px;font-weight:700;line-height:1.05;}
+.tot .l{font-size:11.5px;color:var(--lilac-text);margin-top:3px;}
+.lines{width:100%;border-collapse:collapse;font-size:12px;}
+.lines td{padding:4px 0;border-bottom:1px solid var(--rule);vertical-align:top;}
+.lines td:last-child{text-align:right;white-space:nowrap;font-weight:700;}
+.lines tr.sum td{border-bottom:0;border-top:2px solid var(--ink-mid);padding-top:6px;font-weight:700;}
+.mini{font-size:11px;color:var(--muted);margin-top:9px;line-height:1.45;}
+.flag{background:var(--yellow);padding:7px 9px;font-size:11.5px;margin-top:9px;}
+.flag.bad{background:var(--red-tint);border-left:3px solid var(--red);}
+.flag.good{background:var(--teal-tint);border-left:3px solid var(--teal);}
+
+/* diagram */
+.diag{padding:0 16px;}
+.lane{border:1px solid var(--rule);margin-top:10px;}
+.lane__h{background:var(--paper-tint);padding:6px 11px;font-size:11.5px;font-weight:700;
+  color:var(--headtxt);letter-spacing:.04em;border-bottom:1px solid var(--rule);}
+.lane__b{padding:12px 11px;display:flex;align-items:center;flex-wrap:wrap;}
+.node{border:1px solid var(--rule);background:var(--paper-tint);padding:7px 11px;font-size:12px;
+  min-width:96px;text-align:center;}
+.node b{display:block;font-size:12.5px;}
+.node small{color:var(--muted);font-size:10.5px;}
+.node.hot{background:var(--indigo);color:#fff;border-color:var(--indigo);}
+.node.hot small{color:var(--lilac-text);}
+.node.gd{background:var(--teal);color:#fff;border-color:var(--teal);}
+.node.gd small{color:#D5F5F0;}
+.node.warnn{background:var(--orange);color:#fff;border-color:var(--orange);}
+.node.warnn small{color:#FFEBCC;}
+.arrow{color:var(--lilac-deep);font-size:15px;padding:0 8px;font-weight:700;white-space:nowrap;}
+.arrow small{display:block;font-size:9.5px;color:var(--muted);text-align:center;font-weight:400;}
+
+.summary{border:1px solid var(--rule);margin-top:12px;}
+.summary__h{background:var(--ink-deep);color:var(--lilac-text);padding:8px 12px;font-weight:700;font-size:13px;}
+.summary__b{padding:12px;font-size:13px;}
+.path{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;}
+.pstep{background:var(--paper-tint);border:1px solid var(--rule);padding:4px 9px;font-size:12px;}
+.pstep b{color:var(--indigo);}
+
+.btn{background:var(--ink-mid);color:var(--lilac-text);border:0;padding:7px 14px;font-size:12.5px;
+  font-family:var(--font);cursor:pointer;font-weight:700;}
+.btn:hover{background:var(--indigo);}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--rule);}
+.btn.ghost:hover{background:var(--paper-tint);color:var(--slate);}
+.foot{padding:16px;font-size:11px;color:var(--muted);line-height:1.55;}
+table.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px;}
+table.cmp th{background:var(--ink-dark);color:var(--lilac-soft);text-align:left;padding:6px 9px;
+  border:1px solid var(--rule);font-size:12px;}
+table.cmp td{padding:5px 9px;border:1px solid var(--rule);}
+table.cmp tr:nth-child(even) td{background:var(--paper-tint);}
+table.cmp td.n{text-align:right;white-space:nowrap;}
+.tblwrap{overflow-x:auto;}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="hdr__strip"></div>
+  <div class="hdr__title">&#9672;&nbsp; HUNTER OPS &nbsp; // &nbsp; DIGITAL &amp; IT SOLUTIONS</div>
+  <div class="hdr__doc">RoofCommand Build Explorer</div>
+  <div class="hdr__tag">Prepared for Ivan Mata &nbsp;&#8226;&nbsp; RufCo Construction LLC &nbsp;&#8226;&nbsp; Amarillo, TX &nbsp;&#8226;&nbsp; August 21, 2026</div>
+  <div class="hdr__inst">Answer one question at a time. Each one folds up once you pick, and you can reopen it to change your mind.</div>
+</header>
+
+<div class="intro">
+  <p>Ivan, this is the same decision from the printed document, but you can poke at it. Pick where RoofCommand runs, then where your job photos go, then where your customer and job records live, then how it gets backed up. The price and the diagram at the bottom update as you go.</p>
+  <p>Some choices are not possible, and those are marked in red. Click them anyway. They explain why.</p>
+</div>
+
+<div class="cols">
+  <div>
+    <div class="modebar">
+      <label class="switch">
+        <input type="checkbox" id="allToggle">
+        <span class="track"><span class="knob"></span></span>
+        <span>Show all options at once</span>
+      </label>
+      <span class="modehint" id="modeHint">One question at a time. Flip the switch to see everything side by side.</span>
+    </div>
+
+    <div id="stages"></div>
+
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" id="recBtn">Show my recommendation</button>
+      <button class="btn ghost" id="resetBtn">Start over</button>
+    </div>
+  </div>
+
+  <aside class="panel">
+    <div class="panel__h">RUNNING COST</div>
+    <div class="panel__b">
+      <div class="tot"><div class="n" id="totNum">$0</div><div class="l" id="totLbl">Nothing picked yet</div></div>
+      <table class="lines"><tbody id="lineRows"></tbody></table>
+      <div id="flags"></div>
+      <p class="mini">Three year totals include my setup time at $600 per guaranteed week. Rent figures were checked against GoDaddy and DigitalOcean published pricing on August 21, 2026.</p>
+    </div>
+  </aside>
+</div>
+
+<div class="band">&#9672;&nbsp; HOW IT WOULD BE PUT TOGETHER</div>
+<div class="diag">
+  <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0 0;">This updates as you choose. Boxes in teal are Google services you already pay for. Boxes in purple are the parts I build and you own.</p>
+  <div id="diagram"></div>
+</div>
+
+<div class="band">&#9672;&nbsp; YOUR PATH</div>
+<div class="diag">
+  <div class="summary">
+    <div class="summary__h" id="sumH">Nothing picked yet</div>
+    <div class="summary__b">
+      <div class="path" id="pathRow"><span style="color:var(--muted);font-size:12.5px;">Start with the first question above.</span></div>
+      <div id="sumBody"></div>
+    </div>
+  </div>
+
+  <div class="tblwrap">
+  <table class="cmp" style="margin-top:14px;">
+    <tr><th style="width:34%">All three hosts, side by side</th><th>Hosting you have</th><th>GoDaddy VPS</th><th>DigitalOcean VPS</th></tr>
+    <tr><td>Rent per month</td><td class="n">$0</td><td class="n">$17.99, then $29.99</td><td class="n">$24 flat</td></tr>
+    <tr><td>Working memory</td><td class="n">512 MB</td><td class="n">4 GB</td><td class="n">4 GB</td></tr>
+    <tr><td>Processing cores</td><td class="n">1</td><td class="n">2</td><td class="n">2</td></tr>
+    <tr><td>Disk speed limit</td><td class="n">10 MB/s</td><td class="n">NVMe, no cap</td><td class="n">NVMe, no cap</td></tr>
+    <tr><td>Who fixes a machine problem</td><td class="n">GoDaddy ticket</td><td class="n">Me, minutes</td><td class="n">Me, minutes</td></tr>
+    <tr><td>Works on a phone in the field</td><td class="n">Yes</td><td class="n">Yes</td><td class="n">Yes</td></tr>
+    <tr><td>Survives an office power outage</td><td class="n">Yes</td><td class="n">Yes</td><td class="n">Yes</td></tr>
+  </table>
+  </div>
+</div>
+
+<p class="foot">Prices checked August 21, 2026 against published GoDaddy VPS and DigitalOcean Droplet plans. Account limits come from a read-only walkthrough of the RufCo GoDaddy account on August 20, 2026. Nothing in the account was changed. Setup time figures are my estimates and estimates are wrong in both directions. Drafted for discussion, not a quote.</p>
+
+</div>
+
+<script>
+(function(){
+  var WEEK = 600, MONTHS = 36;
+
+  var STAGES = [
+    {
+      id:"host", n:1,
+      q:"Where does RoofCommand actually run?",
+      short:"Where it runs",
+      hint:"Every option here is rented space in a professional data center. All three work from a phone in the field and survive an office power outage.",
+      opts:[
+        { id:"keep", color:"c-blue", name:"The hosting you already pay for", price:"$0 EXTRA / MONTH",
+          mo:0, weeks:0.5, rec:true,
+          body:"<p>The GoDaddy account already on your bill, paid through February 1, 2027.</p><ul><li>No new bill and no new company</li><li>512 MB working memory, one core</li><li>Deep problems mean a GoDaddy ticket</li><li>Moving to a VPS later takes about a day</li></ul>" },
+        { id:"gdvps", color:"c-teal", name:"GoDaddy private server", price:"$17.99 / MONTH",
+          mo:17.99, weeks:0,
+          body:"<p>Your own machine, same company and same login you already have.</p><ul><li>4 GB memory, two cores, fast disk</li><li>I fix anything myself in minutes</li><li>System snapshots included free</li><li>$17.99 on a three year prepay, $29.99 after</li></ul>" },
+        { id:"dovps", color:"c-orange", name:"DigitalOcean private server", price:"$24 / MONTH",
+          mo:24, weeks:0,
+          body:"<p>Same machine, from a company that only does this.</p><ul><li>Identical power to the GoDaddy server</li><li>$24 flat, cancel any month, no price jump</li><li>Better tools and documentation for me</li><li>A second company and a second bill</li></ul>" }
+      ]
+    },
+    {
+      id:"photos", n:2,
+      q:"Where do the job photos go?",
+      short:"Job photos",
+      hint:"Photos are the heaviest thing the system does, and this choice matters more for speed in the field than the host does.",
+      opts:[
+        { id:"direct", color:"c-teal", name:"Phone sends them straight to Google Drive", price:"$0 / MONTH", rec:true,
+          mo:0, weeks:0.5,
+          body:"<p>The phone talks to Google directly. The server never touches a photo.</p><ul><li>Fastest option on every host</li><li>Handles weak signal properly, picks up where it left off</li><li>Uses the Google storage you already pay for</li><li>You can open any job's photos in Drive with the app switched off</li></ul>" },
+        { id:"viaserver", color:"c-blue", name:"Photos pass through the server first", price:"$0 / MONTH",
+          mo:0, weeks:0,
+          body:"<p>The phone uploads to RoofCommand, which then copies to Google Drive.</p><ul><li>Simplest to build</li><li>Slower, and a weak signal can fail the upload outright</li><li>Two or three crews uploading at once is the strain point</li></ul>",
+          warnIf:function(s){ return s.host==="keep"; },
+          warn:"On the hosting you already have, this is the risky combination. 512 MB of memory and one core is not enough for two or three crews uploading photos at the same time." },
+        { id:"onbox", color:"c-orange", name:"Keep photos on the server itself", price:"VARIES",
+          mo:function(s){ return s.host==="keep" ? 0 : 10; }, weeks:0,
+          body:"<p>No Google Drive involved. Everything sits on the machine.</p><ul><li>You lose the copy you can open without the app</li><li>About 72 GB of photos a year, so storage has to be added over time</li></ul>",
+          deadIf:function(s){ return s.host==="keep"; },
+          dead:"Not possible on the hosting you already have. That account caps at 100 GB and 250,000 files. RufCo generates roughly 72 GB and 108,000 files of photos a year, so it would hit the wall partway through year two with all your job history inside it.",
+          warnIf:function(s){ return !!s.host && s.host!=="keep"; },
+          warn:"Workable on a private server, but you fill the included disk in about a year and start paying for more. Budgeted here at about $10 a month averaged over three years." }
+      ]
+    },
+    {
+      id:"data", n:3,
+      q:"Where do customer and job records live?",
+      short:"Customer records",
+      hint:"This is the customer list, the jobs, the checklists, the money figures. Text, not pictures.",
+      opts:[
+        { id:"db", color:"c-indigo", name:"A real database on the same machine", price:"$0 / MONTH", rec:true,
+          mo:0, weeks:0,
+          body:"<p>The standard answer, included in the build at no extra cost.</p><ul><li>Instant search across every job and customer</li><li>Handles several people editing at the same time safely</li><li>Exports to a spreadsheet any time you want one</li><li>Backed up nightly</li></ul>" },
+        { id:"sheets", color:"c-red", name:"Google Drive or Google Sheets as the database", price:"NOT POSSIBLE",
+          mo:0, weeks:0,
+          body:"<p>You asked about this one, so here is the straight answer.</p>",
+          deadIf:function(){ return true; },
+          dead:"Sheets is a spreadsheet, not a database. Three problems kill it. Two people editing the same job at the same time can silently overwrite each other. There is nothing keeping a photo attached to the right job, so records drift apart as the file grows. And Google caps how many times per minute a program can read or write a Sheet, which a crew of four will hit. It is a good tool for reports and exports, and RoofCommand will write to it for exactly that. It cannot be the thing the business runs on." }
+      ]
+    },
+    {
+      id:"backup", n:4,
+      q:"How does it get backed up?",
+      short:"Backups",
+      hint:"Backups are included either way. The question is whether you also want a full system snapshot you can roll back to.",
+      opts:[
+        { id:"drive", color:"c-teal", name:"Nightly encrypted copy to Google Drive", price:"$0 / MONTH",
+          mo:0, weeks:0,
+          body:"<p>Every night, the whole database is copied to a RufCo Google Drive folder.</p><ul><li>Included on every option</li><li>Uses storage you already pay for</li><li>Covers your data, not the machine's settings</li></ul>" },
+        { id:"both", color:"c-indigo", name:"Drive copy plus full system snapshots", price:"$0 to $2 / MONTH", rec:true,
+          mo:function(s){ return s.host==="dovps" ? 2 : 0; }, weeks:0,
+          body:"<p>Everything above, plus a photograph of the entire machine taken on a schedule.</p><ul><li>A bad update can be undone in minutes instead of rebuilt</li><li>Free on the GoDaddy server, about $2 a month on DigitalOcean</li></ul>",
+          deadIf:function(s){ return s.host==="keep"; },
+          dead:"Not available on shared hosting. You do not control the machine, so there is nothing to snapshot. Your data is still copied to Google Drive nightly, which covers the thing that actually matters. This is a reason some people choose a private server." }
+      ]
+    }
+  ];
+
+  var state = {}, revealed = {}, showAll = false, openId = STAGES[0].id;
+  var nodes = {};
+
+  function val(v, s){ return typeof v === "function" ? v(s) : v; }
+  function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
+  function findOpt(st, id){ for(var i=0;i<st.opts.length;i++){ if(st.opts[i].id===id) return st.opts[i]; } return null; }
+  function firstUnanswered(){
+    for(var i=0;i<STAGES.length;i++){ if(!state[STAGES[i].id]) return STAGES[i].id; }
+    return null;
+  }
+  function isLocked(idx){
+    if(showAll) return false;
+    for(var i=0;i<idx;i++){ if(!state[STAGES[i].id]) return true; }
+    return false;
+  }
+
+  /* ---------- build the DOM once so the collapse can animate ---------- */
+  function build(){
+    var host = document.getElementById("stages");
+    host.innerHTML = "";
+
+    STAGES.forEach(function(st, idx){
+      var sec = document.createElement("section");
+      sec.className = "sec";
+
+      var head = document.createElement("button");
+      head.className = "sec__head";
+      head.type = "button";
+      head.setAttribute("aria-expanded", "false");
+      head.innerHTML =
+        '<span class="stepn">STEP ' + st.n + '</span>' +
+        '<span class="headmain"><span class="headline"></span><span class="headsub"></span></span>' +
+        '<span class="headprice"></span>' +
+        '<span class="chev" aria-hidden="true">&#9662;</span>';
+      head.addEventListener("click", function(){
+        if(isLocked(idx)) return;
+        if(showAll) return;
+        openId = (openId === st.id) ? null : st.id;
+        refresh();
+      });
+
+      var body = document.createElement("div");
+      body.className = "sec__body";
+      var inner = document.createElement("div");
+      inner.className = "sec__inner";
+      var pad = document.createElement("div");
+      pad.className = "sec__pad";
+      pad.innerHTML = '<p class="hint">' + st.hint + '</p>';
+
+      var fan = document.createElement("div");
+      fan.className = "fan";
+
+      var cardRefs = {};
+      st.opts.forEach(function(o){
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "card " + o.color;
+        btn.innerHTML =
+          '<div class="card__head"><span class="cname"></span><span class="card__price"></span></div>' +
+          '<div class="card__body">' + o.body + '<div class="why"></div></div>';
+        btn.addEventListener("click", function(){
+          var dead = o.deadIf ? o.deadIf(state) : false;
+          if(dead){
+            revealed[st.id + ":" + o.id] = !revealed[st.id + ":" + o.id];
+            refresh();
+            return;
+          }
+          state[st.id] = o.id;
+          cleanupInvalid();
+          if(!showAll){ openId = firstUnanswered(); }
+          refresh();
+        });
+        fan.appendChild(btn);
+        cardRefs[o.id] = {
+          btn: btn,
+          name: btn.querySelector(".cname"),
+          price: btn.querySelector(".card__price"),
+          why: btn.querySelector(".why")
+        };
+      });
+
+      pad.appendChild(fan);
+      inner.appendChild(pad);
+      body.appendChild(inner);
+      sec.appendChild(head);
+      sec.appendChild(body);
+      host.appendChild(sec);
+
+      nodes[st.id] = {
+        sec: sec, head: head,
+        line: head.querySelector(".headline"),
+        sub: head.querySelector(".headsub"),
+        price: head.querySelector(".headprice"),
+        cards: cardRefs, idx: idx
+      };
+    });
+  }
+
+  function cleanupInvalid(){
+    STAGES.forEach(function(st){
+      if(!state[st.id]) return;
+      var o = findOpt(st, state[st.id]);
+      if(o && o.deadIf && o.deadIf(state)) delete state[st.id];
+    });
+  }
+
+  /* ---------- refresh everything from state ---------- */
+  function refresh(){
+    STAGES.forEach(function(st, idx){
+      var n = nodes[st.id];
+      var picked = state[st.id] ? findOpt(st, state[st.id]) : null;
+      var locked = isLocked(idx);
+      var open = showAll ? true : (openId === st.id);
+
+      n.sec.classList.toggle("open", open);
+      n.sec.classList.toggle("locked", locked);
+      n.sec.classList.toggle("answered", !!picked);
+      n.head.setAttribute("aria-expanded", open ? "true" : "false");
+      n.head.style.borderLeftColor = picked ? colorOf(picked) : "var(--rule)";
+
+      if(picked && !open){
+        n.line.className = "headline headpick";
+        n.line.textContent = picked.name;
+        n.sub.textContent = st.short + " · click to change";
+        n.price.textContent = val(picked.price, state);
+      } else {
+        n.line.className = "headline headq";
+        n.line.textContent = st.q;
+        n.sub.textContent = locked ? ("Answer step " + STAGES[idx-1].n + " first")
+                          : (picked ? "Currently: " + picked.name : "");
+        n.price.textContent = picked ? val(picked.price, state) : "";
+      }
+
+      st.opts.forEach(function(o){
+        var c = n.cards[o.id];
+        var dead = o.deadIf ? o.deadIf(state) : false;
+        var warn = (!dead && o.warnIf) ? o.warnIf(state) : false;
+
+        c.btn.className = "card " + (dead ? "c-red dead" : o.color) + (state[st.id]===o.id ? " sel" : "");
+        c.name.innerHTML = o.name + ((o.rec && !dead) ? '<span class="rec">MY PICK</span>' : "");
+        c.price.textContent = dead ? "NOT POSSIBLE" : val(o.price, state);
+
+        if(dead && revealed[st.id + ":" + o.id]){
+          c.why.className = "why";
+          c.why.innerHTML = "<b>Why not:</b> " + o.dead;
+        } else if(dead){
+          c.why.className = "why";
+          c.why.innerHTML = '<span style="color:var(--muted)">Click to see why this one does not work.</span>';
+        } else if(warn){
+          c.why.className = "why warn";
+          c.why.innerHTML = "<b>Heads up:</b> " + o.warn;
+        } else {
+          c.why.className = "why";
+          c.why.innerHTML = "";
+        }
+      });
+    });
+
+    document.getElementById("modeHint").textContent = showAll
+      ? "Everything is open. Pick in any order and the total adds up as you go."
+      : "One question at a time. Flip the switch to see everything side by side.";
+
+    updatePanel();
+    updateDiagram();
+    updateSummary();
+  }
+
+  function colorOf(o){
+    var map = { "c-blue":"var(--blue)", "c-teal":"var(--teal)", "c-orange":"var(--orange)",
+                "c-indigo":"var(--indigo)", "c-red":"var(--red)" };
+    return map[o.color] || "var(--rule)";
+  }
+
+  function lineItems(){
+    var out = [];
+    STAGES.forEach(function(st){
+      if(!state[st.id]) return;
+      var o = findOpt(st, state[st.id]);
+      var mo = val(o.mo, state) || 0;
+      var wk = val(o.weeks, state) || 0;
+      out.push({ stage:st, opt:o, mo:mo, weeks:wk, three: mo*MONTHS + wk*WEEK });
+    });
+    return out;
+  }
+
+  function updatePanel(){
+    var items = lineItems();
+    var rows = document.getElementById("lineRows");
+    var flags = document.getElementById("flags");
+    rows.innerHTML = ""; flags.innerHTML = "";
+
+    if(!items.length){
+      document.getElementById("totNum").textContent = "$0";
+      document.getElementById("totLbl").textContent = "Nothing picked yet";
+      rows.innerHTML = '<tr><td style="color:var(--muted)">Answer step 1 to start</td><td></td></tr>';
+      return;
+    }
+
+    var totalMo = 0, totalWk = 0, total3 = 0, html = "";
+    items.forEach(function(it){
+      totalMo += it.mo; totalWk += it.weeks; total3 += it.three;
+      var right = it.mo ? ("$" + it.mo.toFixed(2) + "/mo") : (it.weeks ? (it.weeks + " wk setup") : "included");
+      html += '<tr><td>' + it.opt.name + '</td><td>' + right + '</td></tr>';
+    });
+    html += '<tr><td>Rent over three years</td><td>' + money(totalMo*MONTHS) + '</td></tr>';
+    html += '<tr><td>My setup time (' + totalWk + ' wk)</td><td>' + money(totalWk*WEEK) + '</td></tr>';
+    html += '<tr class="sum"><td>Three year total</td><td>' + money(total3) + '</td></tr>';
+    rows.innerHTML = html;
+
+    document.getElementById("totNum").textContent = money(total3);
+    var left = STAGES.length - items.length;
+    document.getElementById("totLbl").textContent = left
+      ? ("So far, over three years. " + left + " question" + (left>1?"s":"") + " left.")
+      : ("Over three years, everything in. About " + money(totalMo) + " a month.");
+
+    if(state.host === "keep" && state.photos === "viaserver"){
+      flags.innerHTML += '<div class="flag bad"><b>The one combination I would avoid.</b> Small machine plus every photo passing through it. This is where the field crew feels it first.</div>';
+    }
+    if(state.photos === "direct"){
+      flags.innerHTML += '<div class="flag good"><b>Good choice.</b> Sending photos straight to Google takes the heaviest job off the machine, which is why this works well even on the cheapest host.</div>';
+    }
+    if(state.host === "keep" && state.photos === "direct" && state.data === "db"){
+      flags.innerHTML += '<div class="flag"><b>This is the setup I recommend.</b> Zero extra cost, and moving to a private server later is about a day of work if the pilot shows you need it.</div>';
+    }
+    if(state.host === "gdvps"){
+      flags.innerHTML += '<div class="flag"><b>Worth knowing.</b> The $17.99 requires a three year prepay. It renews at $29.99, which is more than DigitalOcean charges.</div>';
+    }
+  }
+
+  function node(cls, title, sub){
+    return '<div class="node ' + cls + '"><b>' + title + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+  }
+  function arrow(label){
+    return '<div class="arrow">&#8594;' + (label ? '<small>' + label + '</small>' : '') + '</div>';
+  }
+  var HOSTNAME = { keep:"Hosting you have", gdvps:"GoDaddy server", dovps:"DigitalOcean server" };
+
+  function updateDiagram(){
+    var d = document.getElementById("diagram");
+    if(!state.host){
+      d.innerHTML = '<div class="lane"><div class="lane__b" style="color:var(--muted);font-size:12.5px;">Pick an answer above and the diagram builds itself.</div></div>';
+      return;
+    }
+    var hn = HOSTNAME[state.host], html = "";
+
+    html += '<div class="lane"><div class="lane__h">JOB AND CUSTOMER RECORDS &nbsp;&#8226;&nbsp; the everyday screens</div><div class="lane__b">' +
+      node("", "Phone in the field", "any browser") + arrow("") +
+      node("hot", "RoofCommand", hn) + arrow("saves to") +
+      (state.data === "db" ? node("hot", "Database", "on the same machine") : node("", "Database", "not chosen yet")) +
+      '</div></div>';
+
+    if(state.photos){
+      var pl;
+      if(state.photos === "direct"){
+        pl = node("", "Phone camera", "resized on the phone") + arrow("uploads straight to") +
+             node("gd", "Google Shared Drive", "storage you already pay for") + arrow("file ID only") +
+             node("hot", "RoofCommand", hn);
+      } else if(state.photos === "viaserver"){
+        pl = node("", "Phone camera", "") + arrow("uploads to") +
+             node(state.host === "keep" ? "warnn" : "hot", "RoofCommand", hn + (state.host==="keep" ? " · 512 MB" : "")) +
+             arrow("copies nightly to") + node("gd", "Google Shared Drive", "second copy");
+      } else {
+        pl = node("", "Phone camera", "") + arrow("uploads to") +
+             node("warnn", "Disk on the machine", "grows about 72 GB a year");
+      }
+      html += '<div class="lane"><div class="lane__h">JOB PHOTOS &nbsp;&#8226;&nbsp; the heavy part</div><div class="lane__b">' + pl + '</div></div>';
+    }
+
+    if(state.backup){
+      var bl = node("hot", "Database", "on " + hn) + arrow("every night") +
+               node("gd", "Google Drive backup", "encrypted");
+      if(state.backup === "both"){
+        bl += arrow("plus") + node("hot", "System snapshot", state.host === "dovps" ? "about $2 a month" : "included free");
+      }
+      html += '<div class="lane"><div class="lane__h">BACKUPS &nbsp;&#8226;&nbsp; what happens if something breaks</div><div class="lane__b">' + bl + '</div></div>';
+    }
+    d.innerHTML = html;
+  }
+
+  function updateSummary(){
+    var items = lineItems();
+    var pr = document.getElementById("pathRow");
+    var sh = document.getElementById("sumH");
+    var sb = document.getElementById("sumBody");
+
+    if(!items.length){
+      sh.textContent = "Nothing picked yet";
+      pr.innerHTML = '<span style="color:var(--muted);font-size:12.5px;">Start with the first question above.</span>';
+      sb.innerHTML = "";
+      return;
+    }
+
+    pr.innerHTML = items.map(function(it, i){
+      return (i ? '<span class="arrow" style="padding:0 2px">&#8594;</span>' : '') +
+             '<span class="pstep"><b>' + it.stage.n + '.</b> ' + it.opt.name + '</span>';
+    }).join("");
+
+    var done = items.length === STAGES.length;
+    var total3 = items.reduce(function(a,b){ return a + b.three; }, 0);
+    var totalMo = items.reduce(function(a,b){ return a + b.mo; }, 0);
+
+    sh.textContent = done
+      ? ("Your setup: " + money(total3) + " over three years, about " + money(totalMo) + " a month")
+      : ("So far: " + money(total3) + " over three years, " + (STAGES.length - items.length) + " question(s) left");
+
+    if(!done){
+      sb.innerHTML = '<p style="color:var(--muted);font-size:12.5px;margin:0">Answer the remaining questions and this fills in with a plain summary of what you picked.</p>';
+      return;
+    }
+
+    var b = "<p>Here is what that means in plain terms.</p><ul>";
+    b += "<li><b>Day to day.</b> Your crew opens RoofCommand in the browser on their phone. Jobs, customers, checklists and photos are all there, from any job site, on any network.</li>";
+    if(state.photos === "direct"){
+      b += "<li><b>Photos.</b> The phone sends them straight to Google, so a weak signal at a job site does not stall the app and nothing gets stuck waiting on the server.</li>";
+    } else if(state.photos === "viaserver"){
+      b += "<li><b>Photos.</b> They pass through RoofCommand first. Simpler to build, slower in the field, and the point where several crews uploading at once will be felt.</li>";
+    } else {
+      b += "<li><b>Photos.</b> They stay on the machine. You lose the Google Drive copy you could open without the app, and storage grows every month.</li>";
+    }
+    b += (state.host === "keep")
+      ? "<li><b>If something breaks.</b> Anything in the program, I fix in minutes. Anything in the machine itself means a GoDaddy ticket and waiting on them.</li>"
+      : "<li><b>If something breaks.</b> I log in and fix it myself, at any level, usually in minutes.</li>";
+    b += "<li><b>If you leave.</b> Everything exports. You own the program, the data, and the accounts. There is no per-person fee at any point.</li></ul>";
+    b += '<p style="margin-top:10px"><b>What I need from you either way:</b> who owns and pays for the Wix account, whether automatic renewal is on for rufcollc.com, and a copy of a recent GoDaddy invoice.</p>';
+    sb.innerHTML = b;
+  }
+
+  document.getElementById("allToggle").addEventListener("change", function(e){
+    showAll = e.target.checked;
+    if(!showAll){ openId = firstUnanswered() || null; }
+    refresh();
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    state = {}; revealed = {};
+    openId = showAll ? null : STAGES[0].id;
+    refresh();
+    window.scrollTo({ top:0, behavior:"smooth" });
+  });
+  document.getElementById("recBtn").addEventListener("click", function(){
+    state = { host:"keep", photos:"direct", data:"db", backup:"drive" };
+    revealed = {}; openId = null;
+    refresh();
+  });
+
+  build();
+  refresh();
+})();
+</script>
+
+</body>
+</html>

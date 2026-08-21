@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Where RoofCommand Lives</title>
+<style>
+:root{
+--ho-ink-deep:#100820; --ho-ink-dark:#1A0A2E; --ho-ink-mid:#26215C;
+--ho-lilac-text:#EEEDFE; --ho-lilac-soft:#AFA9EC; --ho-lilac-deep:#7F77DD;
+--ho-indigo:#534AB7; --ho-slate:#1E293B;
+--ho-teal:#0D9488; --ho-teal-tint:#F0FDFA;
+--ho-red:#DC2626; --ho-red-tint:#FFF2F2;
+--ho-blue:#1D4ED8; --ho-blue-tint:#EFF6FF;
+--ho-orange:#D97706; --ho-orange-tint:#FFFBEB;
+--ho-paper:#FFFFFF; --ho-paper-tint:#F8F9FF; --ho-yellow:#FFF7CC; --ho-rule:#E2E1F2;
+--ho-font:Arial,"Liberation Sans",sans-serif;
+}
+@page{size:letter;margin:0.45in 0.5in 0.62in 0.5in;
+ @bottom-left{content:"Hunter Ops Digital & IT Solutions   //   Where RoofCommand Lives   //   RufCo Construction LLC";
+  font-family:Arial,"Liberation Sans",sans-serif;font-size:7.5pt;color:#7F77DD;}
+ @bottom-right{content:"Page " counter(page) " of " counter(pages);
+  font-family:Arial,"Liberation Sans",sans-serif;font-size:7.5pt;color:#7F77DD;}}
+*{box-sizing:border-box;}
+body{font-family:var(--ho-font);color:var(--ho-slate);background:var(--ho-paper);
+ margin:0;font-size:9.4pt;line-height:1.45;}
+.ho-header__strip{height:6px;background:var(--ho-ink-deep);}
+.ho-header__title{padding:7px 14px;background:var(--ho-ink-deep);color:var(--ho-lilac-text);
+ font-weight:700;font-size:13pt;letter-spacing:.01em;}
+.ho-header__doctitle{padding:5px 14px;background:var(--ho-ink-dark);color:var(--ho-lilac-soft);
+ font-weight:700;font-size:12pt;}
+.ho-header__tagline{padding:4px 14px;background:var(--ho-ink-mid);color:var(--ho-lilac-deep);font-size:9pt;}
+.ho-header__instructions{padding:5px 14px;background:var(--ho-lilac-text);color:var(--ho-ink-mid);font-size:9pt;}
+.ho-header__spacer{height:11px;background:var(--ho-paper);}
+.ho-section-band{background:var(--ho-ink-dark);color:var(--ho-lilac-soft);padding:6px 14px;
+ font-weight:700;font-size:10.5pt;margin-top:13px;margin-bottom:7px;page-break-after:avoid;}
+p{margin:0 0 8px 0;}
+.ind{padding-left:14px;padding-right:6px;}
+.ho-table{width:100%;border-collapse:collapse;font-size:8.9pt;margin-bottom:6px;}
+.ho-table th{background:var(--ho-ink-dark);color:var(--ho-lilac-soft);text-align:left;
+ font-weight:700;padding:6px 9px;border:1px solid var(--ho-rule);}
+.ho-table td{padding:5px 9px;border:1px solid var(--ho-rule);vertical-align:top;}
+.ho-table tr:nth-child(even) td{background:var(--ho-paper-tint);}
+.ho-table td.num{text-align:right;white-space:nowrap;}
+.ho-table td.ctr{text-align:center;}
+.big{background:var(--ho-indigo);color:#fff;padding:12px 16px;margin-bottom:10px;page-break-inside:avoid;}
+.big .n{font-size:17pt;font-weight:700;line-height:1.15;}
+.big .s{font-size:9.5pt;color:#EEEDFE;margin-top:4px;}
+.kpirow{display:flex;gap:8px;margin-bottom:9px;}
+.ho-kpi{flex:1;border:1px solid var(--ho-rule);}
+.ho-kpi__label{background:var(--ho-paper-tint);color:var(--ho-slate);padding:5px 6px;
+ font-size:8pt;font-weight:700;text-align:center;}
+.ho-kpi__value{background:var(--ho-indigo);color:#fff;padding:7px 6px;font-size:13pt;
+ font-weight:700;text-align:center;}
+.ho-kpi--good .ho-kpi__value{background:var(--ho-teal);}
+.ho-kpi--warn .ho-kpi__value{background:var(--ho-orange);}
+.ho-kpi--core .ho-kpi__value{background:var(--ho-red);}
+.ho-card{background:var(--ho-paper);border:1px solid var(--ho-rule);padding:9px 12px;margin-bottom:8px;
+ page-break-inside:avoid;}
+.ho-card--tint{background:var(--ho-paper-tint);}
+.opt{border:1px solid var(--ho-rule);margin-bottom:9px;page-break-inside:avoid;}
+.opt__head{padding:6px 12px;color:#fff;font-weight:700;font-size:10pt;}
+.opt__head .tag{float:right;font-size:8.2pt;font-weight:700;letter-spacing:.04em;}
+.opt--a .opt__head{background:var(--ho-blue);} .opt--a .opt__body{background:var(--ho-blue-tint);}
+.opt--b .opt__head{background:var(--ho-teal);} .opt--b .opt__body{background:var(--ho-teal-tint);}
+.opt--c .opt__head{background:var(--ho-orange);} .opt--c .opt__body{background:var(--ho-orange-tint);}
+.opt__body{padding:9px 12px;font-size:9pt;}
+.opt__body b{color:var(--ho-ink-mid);}
+.pc{display:flex;gap:10px;margin-top:2px;}
+.pc>div{flex:1;}
+.pc h5{margin:0 0 3px 0;font-size:8.8pt;letter-spacing:.03em;}
+.pc .good h5{color:#0B7A70;}
+.pc .bad h5{color:#B91C1C;}
+.pc ul{margin:0;padding-left:15px;}
+.pc li{margin-bottom:3px;}
+.pick{display:inline-block;width:11px;height:11px;border:1.5px solid var(--ho-ink-mid);
+ background:#fff;vertical-align:-1px;margin-right:6px;}
+.chart{border:1px solid var(--ho-rule);padding:9px 12px 6px 12px;margin-bottom:7px;
+ background:var(--ho-paper);page-break-inside:avoid;}
+.chart h4{margin:0 0 1px 0;font-size:10.5pt;color:var(--ho-ink-dark);}
+.chart .cap{font-size:7.8pt;color:#64748B;margin:0 0 6px 0;}
+.brow{display:flex;align-items:center;margin-bottom:4px;font-size:8.2pt;}
+.blab{width:200px;flex:0 0 200px;padding-right:8px;line-height:1.2;}
+.btrack{flex:1;background:var(--ho-paper-tint);height:16px;position:relative;
+ border-left:1px solid var(--ho-rule);}
+.bfill{height:16px;background:var(--ho-lilac-deep);}
+.bfill.me{background:var(--ho-teal);}
+.bfill.hot{background:var(--ho-red);}
+.bfill.warn{background:var(--ho-orange);}
+.bval{position:absolute;top:2px;font-size:8pt;font-weight:700;color:var(--ho-slate);}
+.note{background:var(--ho-yellow);padding:9px 12px;font-size:8.8pt;margin-bottom:9px;page-break-inside:avoid;}
+.keep{page-break-inside:avoid;}
+h3{font-size:10.5pt;color:var(--ho-ink-mid);margin:12px 0 5px 0;}
+ul{margin:0 0 8px 0;padding-left:18px;} li{margin-bottom:3px;}
+.blank{display:inline-block;min-width:78px;border-bottom:1px solid var(--ho-slate);}
+.sigline{border-bottom:1px solid var(--ho-slate);height:24px;margin-top:12px;}
+.pb{page-break-before:always;}
+.src{font-size:7.2pt;color:#64748B;line-height:1.45;}
+.reqrow{display:flex;gap:7px;margin-bottom:9px;}
+.req{flex:1;border:1px solid var(--ho-rule);background:var(--ho-paper-tint);padding:8px 9px;font-size:8.4pt;}
+.req b{display:block;color:var(--ho-ink-mid);font-size:9pt;margin-bottom:2px;}
+
+@media screen{
+  html{background:#EDECF4;}
+  body{max-width:8.5in;margin:0 auto;background:#fff;padding:0 0 40px 0;font-size:11.5pt;
+       box-shadow:0 0 0 1px #D8D5E8;}
+  body>*:not(header){padding-left:14px;padding-right:14px;}
+  body>header{padding:0;}
+  .ho-section-band,.big{margin-left:-14px;margin-right:-14px;}
+  .pb{page-break-before:auto;}
+  .backlink{display:block;padding:10px 14px;background:#26215C;color:#EEEDFE;font-size:10pt;
+            text-decoration:none;}
+  .backlink:hover{background:#534AB7;}
+}
+@media print{ .backlink{display:none;} }
+</style></head>
+<body>
+<a class="backlink" href="./">&#8592; Back to the RufCo documents</a>
+
+<header>
+<div class="ho-header__strip"></div>
+<div class="ho-header__title">  &#9672;  HUNTER OPS   //   DIGITAL &amp; IT SOLUTIONS</div>
+<div class="ho-header__doctitle">  Where RoofCommand Lives: Three Options, Explained Simply</div>
+<div class="ho-header__tagline">  Prepared for Ivan Mata  &#8226;  RufCo Construction LLC  &#8226;  Amarillo, TX  &#8226;  August 21, 2026</div>
+<div class="ho-header__instructions">  No technical background needed. Read pages 1 and 2, skim the rest, then check a box on the last page.</div>
+<div class="ho-header__spacer"></div>
+</header>
+
+<div class="ind">
+<p>Ivan, my last document gave you five options. You have since told me what actually matters to you, and that knocks two of them out completely. This one covers the three that are left, in plain language, with the honest good and bad of each.</p>
+</div>
+
+<div class="ho-section-band">  &#9672;  WHAT YOU SAID YOU NEED</div>
+
+<div class="reqrow">
+<div class="req"><b>Works from a phone</b>Anywhere your crew has signal, not just at the office.</div>
+<div class="req"><b>Works from a computer</b>Any web browser, no software to install.</div>
+<div class="req"><b>Stays up</b>Including when the office loses power or internet.</div>
+<div class="req"><b>No machine in the office</b>Nothing sitting in a closet that somebody has to babysit.</div>
+</div>
+
+<p class="ind">That last one removes two options from the previous document: the office computer, and the office computer with a backup server. Both put a physical box in your building. They are off the table.</p>
+
+<p class="ind"><b>Here is the part worth knowing before you read any further.</b> The three options left are all rented space in professional data centers. Those buildings have backup generators, backup internet lines, and staff on site around the clock. A power flicker at the RufCo office has no effect on any of them. All three meet every requirement in the boxes above, today, without exception.</p>
+
+<p class="ind">So the decision is not about whether it works. It is about two things only: <b>how fast a problem gets fixed</b>, and <b>how much room there is to grow</b>.</p>
+
+<div class="ho-section-band">  &#9672;  WHAT "HOSTING" ACTUALLY MEANS, IN PLAIN TERMS</div>
+
+<p class="ind">Every website and every online program has to physically run on a computer somewhere. Renting that space is called hosting. There are two kinds worth knowing about, and the difference is easiest to see as renting space in a building.</p>
+
+<table class="ho-table">
+<tr><th style="width:22%">What it is called</th><th style="width:39%">What it is like</th><th>What that means for RufCo</th></tr>
+<tr><td><b>Shared hosting</b><br>(what you have now)</td><td>A desk in a shared office building. The landlord runs the building, handles security, keeps the lights on. You cannot rewire anything. If the plumbing breaks, you submit a request and wait for the landlord.</td><td>Cheap and already paid for. When something goes wrong at the building level, I have to call GoDaddy and wait for them, instead of fixing it myself.</td></tr>
+<tr><td><b>A private server</b><br>(often called a VPS)</td><td>Leasing your own suite in the same kind of building. You get keys to the utility closet. Same generators, same security, same address. More space, more control, and a monthly rent.</td><td>When something goes wrong, I log in and fix it in minutes instead of opening a ticket. Costs about $18 to $24 a month.</td></tr>
+</table>
+
+<div class="big">
+  <div class="n">Straight answer: no, you do not need a private server</div>
+  <div class="s">The hosting you already pay for does everything on your list. A private server is an upgrade you buy for faster repairs and extra room. It is not a requirement, and I am not going to tell you it is one.</div>
+</div>
+
+<p class="ind">I checked your GoDaddy account by hand on August 20 rather than guessing from the plan name. It turned out to be a real, full-featured hosting account with every tool I need to build RoofCommand on it. That was not what I expected, and it is why my recommendation changed from my first draft.</p>
+
+<div class="ho-section-band">  &#9672;  THE PARTS THAT ARE THE SAME NO MATTER WHICH YOU PICK</div>
+
+<div class="ho-card ho-card--tint">
+<ul style="margin-bottom:0">
+<li><b>Job photos go to Google Drive</b>, in the Google account RufCo already pays for. You can open any job's photos in Drive with RoofCommand switched off. Nobody can hold your photos hostage.</li>
+<li><b>Everyone signs in with their existing RufCo Google account.</b> No new passwords. When somebody leaves, you shut off their Google account and their RoofCommand access dies the same second.</li>
+<li><b>No per-person fee, ever.</b> Adding Andrew, or a fifth person, or a tenth, costs nothing.</li>
+<li><b>You own it.</b> The program, the data, the accounts. All of it exports, and it can be moved to different hardware.</li>
+<li><b>It lives at app.rufcollc.com</b>, separate from your public website, so nothing that happens to one can take down the other.</li>
+</ul>
+</div>
+
+<div class="ho-section-band">  &#9672;  THE THREE OPTIONS, GOOD AND BAD</div>
+
+<div class="opt opt--a">
+<div class="opt__head">OPTION 1 &#8226; Use the hosting you already pay for<span class="tag">$0 EXTRA PER MONTH</span></div>
+<div class="opt__body">
+<p style="margin-bottom:6px">RoofCommand goes on the GoDaddy hosting already sitting on your account, paid through February 1, 2027. Nothing new to buy and nobody new to deal with.</p>
+<div class="pc">
+<div class="good"><h5>&#10022;  GOOD</h5><ul>
+<li>No new bill of any kind. It is already paid for.</li>
+<li>One company, one login, one renewal date to remember.</li>
+<li>I verified in your account that every tool I need is there.</li>
+<li>Works from any phone or computer, anywhere, always.</li>
+<li>If you outgrow it, moving to Option 2 takes me about a day. You are not locked in.</li>
+</ul></div>
+<div class="bad"><h5>&#9888;  BAD</h5><ul>
+<li>The space is small. Comfortable for four to six people, not much cushion beyond that.</li>
+<li>You share the building. A problem on GoDaddy's end means waiting on GoDaddy.</li>
+<li>Deep problems mean a support ticket, not a fix from me. Could be twenty minutes, could be half a day.</li>
+<li>An old, unused website on that same account has to be cleaned up first. Small job, but it has to happen.</li>
+<li>Costs me about half a week of planning rework, because I have to build it in a different programming language than I originally planned.</li>
+</ul></div>
+</div>
+</div>
+</div>
+
+<div class="opt opt--b">
+<div class="opt__head">OPTION 2 &#8226; Your own private server, still with GoDaddy<span class="tag">$17.99 / MONTH</span></div>
+<div class="opt__body">
+<p style="margin-bottom:6px">Same company, same login, same bill you already get. A separate machine that runs nothing but RoofCommand.</p>
+<div class="pc">
+<div class="good"><h5>&#10022;  GOOD</h5><ul>
+<li>Eight times the working room of Option 1. Space to grow for years.</li>
+<li>When anything breaks, at any level, I log in and fix it. No ticket, no waiting.</li>
+<li>Automatic snapshots, which are full copies of the system taken on a schedule. A bad change can be undone in minutes.</li>
+<li>Nothing else lives on it, so nothing else can affect it.</li>
+<li>Still one company and one login, same as today.</li>
+</ul></div>
+<div class="bad"><h5>&#9888;  BAD</h5><ul>
+<li>$17.99 a month only if you prepay three years. After that first term it goes to $29.99.</li>
+<li>Your current hosting becomes redundant. Some of that money comes back when it renews in February 2027, but I need your invoice to tell you how much.</li>
+<li>It is a real computer, so it needs updates and attention. That is my job now, and a fair question about who does it later.</li>
+<li>You are paying for insurance against a problem that may never happen.</li>
+</ul></div>
+</div>
+</div>
+</div>
+
+<div class="opt opt--c">
+<div class="opt__head">OPTION 3 &#8226; Your own private server, different company<span class="tag">$24 / MONTH</span></div>
+<div class="opt__body">
+<p style="margin-bottom:6px">The same thing as Option 2, rented from a company that specializes in this rather than from GoDaddy. DigitalOcean is the one I would use.</p>
+<div class="pc">
+<div class="good"><h5>&#10022;  GOOD</h5><ul>
+<li>Everything in Option 2, plus better tools and far better documentation for me to work with.</li>
+<li>$24 flat, month to month. No three-year prepay, no price jump later, cancel any month.</li>
+<li>Cheaper than Option 2 starting in year four, because Option 2 renews at $29.99.</li>
+</ul></div>
+<div class="bad"><h5>&#9888;  BAD</h5><ul>
+<li>A second company and a second bill to keep track of.</li>
+<li>A new account to open in your name, with your card on it.</li>
+<li>Most expensive of the three in the first three years.</li>
+</ul></div>
+</div>
+</div>
+</div>
+
+<div class="ho-section-band">  &#9672;  SIDE BY SIDE</div>
+
+<table class="ho-table">
+<tr><th style="width:31%"></th><th style="width:23%">1. What you have</th><th style="width:23%">2. GoDaddy server</th><th>3. Other server</th></tr>
+<tr><td>Cost per month</td><td class="ctr"><b>$0</b></td><td class="ctr">$17.99, then $29.99</td><td class="ctr">$24 flat</td></tr>
+<tr><td>Already paid for</td><td class="ctr"><b>Yes, thru Feb 2027</b></td><td class="ctr">No</td><td class="ctr">No</td></tr>
+<tr><td>Works on a phone in the field</td><td class="ctr">Yes</td><td class="ctr">Yes</td><td class="ctr">Yes</td></tr>
+<tr><td>Works in a browser at a desk</td><td class="ctr">Yes</td><td class="ctr">Yes</td><td class="ctr">Yes</td></tr>
+<tr><td>Survives an office power outage</td><td class="ctr">Yes</td><td class="ctr">Yes</td><td class="ctr">Yes</td></tr>
+<tr><td>Working room</td><td class="ctr">Small</td><td class="ctr"><b>8x larger</b></td><td class="ctr"><b>8x larger</b></td></tr>
+<tr><td>Who fixes a problem in the program</td><td class="ctr">Me, minutes</td><td class="ctr">Me, minutes</td><td class="ctr">Me, minutes</td></tr>
+<tr><td>Who fixes a problem in the machine</td><td class="ctr">GoDaddy ticket</td><td class="ctr"><b>Me, minutes</b></td><td class="ctr"><b>Me, minutes</b></td></tr>
+<tr><td>Automatic system snapshots</td><td class="ctr">Manual only</td><td class="ctr">Yes</td><td class="ctr">Yes</td></tr>
+<tr><td>Companies on the bill</td><td class="ctr"><b>1, already there</b></td><td class="ctr"><b>1, already there</b></td><td class="ctr">2</td></tr>
+<tr><td>Can move to another option later</td><td class="ctr">Yes, about a day</td><td class="ctr">Yes, about a day</td><td class="ctr">Yes, about a day</td></tr>
+</table>
+
+<div class="ho-section-band">  &#9672;  WHAT IT COSTS OVER THREE YEARS</div>
+
+<div class="chart">
+<h4>Three year total, hosting plus my setup time</h4>
+<p class="cap">My time counted at the current weekly rate. Scale runs to $900.</p>
+<div class="brow"><div class="blab"><b>1. Hosting you already have</b></div><div class="btrack"><div class="bfill me" style="width:33.3%"></div><div class="bval" style="left:35%">$300</div></div></div>
+<div class="brow"><div class="blab">2. GoDaddy private server</div><div class="btrack"><div class="bfill" style="width:72%"></div><div class="bval" style="left:74%">$648</div></div></div>
+<div class="brow"><div class="blab">3. Other company's server</div><div class="btrack"><div class="bfill warn" style="width:96%"></div><div class="bval" style="left:80%;color:#fff">$864</div></div></div>
+</div>
+
+<table class="ho-table">
+<tr><th style="width:34%">Option</th><th style="width:17%">Rent, 3 years</th><th style="width:17%">My setup time</th><th style="width:15%">Time as cost</th><th>Three year total</th></tr>
+<tr><td>1. Hosting you already have</td><td class="num">$0</td><td class="num">Half a week</td><td class="num">$300</td><td class="num"><b>$300</b></td></tr>
+<tr><td>2. GoDaddy private server</td><td class="num">$648</td><td class="num">None</td><td class="num">$0</td><td class="num"><b>$648</b></td></tr>
+<tr><td>3. Other company's server</td><td class="num">$864</td><td class="num">None</td><td class="num">$0</td><td class="num"><b>$864</b></td></tr>
+</table>
+
+<div class="note"><b>Two things to keep in mind about these numbers.</b> First, if you pick Option 2 or 3, your current hosting is doing nothing for you and can be dropped when it renews in February 2027, which takes <span class="blank">&nbsp;</span> off the totals above. I need your GoDaddy invoice to fill that in. Second, the half week on Option 1 is my estimate, and estimates are wrong in both directions. The rent figures I can look up, and I did, on August 21.</div>
+
+<div class="ho-section-band">  &#9672;  YOUR WEBSITE IS ON WIX, AND WHAT THAT CHANGES</div>
+
+<p class="ind">While I was in your GoDaddy account I found that rufcollc.com is not being served from GoDaddy at all. It is on Wix, a different company entirely. The GoDaddy hosting you pay for is sitting almost empty next to it. You asked what our options look like if we get the Wix login and dig in. Here is the honest answer.</p>
+
+<div class="big" style="background:var(--ho-ink-mid)">
+  <div class="n">Getting the Wix login does not add a fourth option</div>
+  <div class="s">Wix builds and hosts websites. It is not a place a custom program with its own database can live. This decision does not change either way.</div>
+</div>
+
+<p class="ind">Wix is a website builder, the same category as GoDaddy's own website builder. It is very good at what it does. You point and click, it produces a website, and Wix runs it for you. What it does not do is let somebody build a full custom application on top of it. Wix has a coding feature for adding small pieces of behavior to a Wix site, and it comes with hard limits on how much work it will let that code do, plus limits on how much data it will store. RoofCommand is a real program with a real database behind it. That is a different thing than a website, and Wix is not built to hold it.</p>
+
+<p class="ind">So the Wix question is not a hosting question. It is an ownership question about your public website, and it still needs an answer.</p>
+
+<h3>The three ways this can go</h3>
+
+<table class="ho-table">
+<tr><th style="width:26%">What we find</th><th style="width:37%">What it means</th><th>What we do</th></tr>
+<tr><td><b>RufCo owns the Wix account</b><br>and pays the bill</td><td>Best case. You control your own website and always did.</td><td>Get the login into your hands, add it to the list of accounts you own, and website work can go ahead whenever you want it.</td></tr>
+<tr><td><b>SKP Creative owns it</b><br>and is willing to hand it over</td><td>Normal and fixable. It happens constantly with small businesses.</td><td>Request a transfer of the Wix account, or export the content and rebuild the site somewhere you own. Half a day of work either way.</td></tr>
+<tr><td><b>SKP Creative owns it</b><br>and will not hand it over</td><td>The one that costs you something. It means somebody outside RufCo controls the address customers use to find you.</td><td>Rebuild the website on hosting you own. You already have hosting sitting empty that could run it. This becomes a scoped project rather than a quick fix.</td></tr>
+</table>
+
+<div class="ho-card">
+<p style="margin-bottom:0"><b>What I need from you, and it takes five minutes.</b> Who set up the Wix account, who pays that bill, and does anyone at RufCo have the login. Even if the answer is "I have no idea," tell me that, and I will work from there. Nothing about RoofCommand is waiting on this. Your public website is.</p>
+</div>
+
+<h3>Three smaller things I found while I was in there</h3>
+<ul class="ind">
+<li><b>Two email security settings are missing.</b> Your mail is correctly routed through Google, but two records that prove a message really came from RufCo were never set up. Without them your email is easier to fake and more likely to land in a customer's spam folder. This was already in our plan. Now I know exactly what is missing.</li>
+<li><b>There is an old, unused WordPress site parked on your GoDaddy account.</b> Nobody visits it and nobody maintains it. It should be removed or locked down before RoofCommand goes on that account.</li>
+<li><b>Check that automatic renewal is on, especially for the domain name.</b> GoDaddy is prompting me to turn it on, which suggests it is off somewhere. If rufcollc.com ever lapses, your website and your company email both go down at the same time.</li>
+</ul>
+
+<div class="ho-section-band">  &#9672;  MY RECOMMENDATION</div>
+
+<div class="big">
+  <div class="n">Start on Option 1. Keep Option 2 written down as the upgrade.</div>
+  <div class="s">Zero extra cost, it meets everything on your list today, and if it turns out to be tight I can move you for about $18 a month and one day of work.</div>
+</div>
+
+<p class="ind">The reasoning is short. Options 2 and 3 buy you faster repairs and extra room. Both are worth having. Neither is worth buying today, because I do not yet know whether you need them, and I would rather find out with your real crew using the real system than guess in August and be wrong in either direction.</p>
+
+<p class="ind">February 1, 2027 is when your current hosting renews. That is a natural point to look at how the pilot actually went and decide with facts instead of estimates. Nothing about starting on Option 1 makes moving later harder or more expensive.</p>
+
+<div class="ho-card ho-card--tint">
+<p style="margin-bottom:0"><b>The one thing that would change my answer.</b> If RoofCommand being unreachable for a couple of hours in the middle of a workday would genuinely cost RufCo money, buy Option 2 now and do not think about it again. That is the whole question. If a two hour outage is an annoyance you would work around, Option 1 is the right call.</p>
+</div>
+
+<div class="ho-section-band">  &#9672;  PICK ONE</div>
+
+<div class="ho-card">
+<p><span class="pick"></span><b>Option 1.</b> Use the hosting I already pay for. $0 extra. Move later if we need to.</p>
+<p><span class="pick"></span><b>Option 2.</b> GoDaddy private server, $17.99 a month on a three year term. Faster fixes, more room.</p>
+<p><span class="pick"></span><b>Option 3.</b> A private server from another company, $24 a month, cancel anytime.</p>
+<p style="margin-bottom:0"><span class="pick"></span><b>I want to talk it through first.</b></p>
+</div>
+
+<div class="ho-card">
+<p style="margin-bottom:2px"><b>Also, whichever you pick, I need three answers from you:</b></p>
+<p style="margin:0 0 2px 14px">1. Who owns and pays for the Wix account, and does RufCo have the login?</p>
+<p style="margin:0 0 2px 14px">2. Is automatic renewal turned on for rufcollc.com?</p>
+<p style="margin:0 0 0 14px">3. A copy of a recent GoDaddy invoice, so I can fill in the blank in the cost table.</p>
+</div>
+
+<div style="display:flex;gap:24px;margin-top:6px">
+<div style="flex:1"><div class="sigline"></div><div style="font-size:8pt;color:#64748B">Ivan Mata, RufCo Construction LLC</div></div>
+<div style="flex:0 0 150px"><div class="sigline"></div><div style="font-size:8pt;color:#64748B">Date</div></div>
+</div>
+
+<p class="src" style="margin-top:12px">Prices checked August 21, 2026 against GoDaddy's published VPS plans and DigitalOcean's published Droplet plans. Account findings come from a read-only walkthrough of the RufCo GoDaddy account and control panel on August 20, 2026. Nothing in the account was changed.</p>
+
+</body></html>
